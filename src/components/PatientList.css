@@ -1,0 +1,78 @@
+.patient-list {
+  background: white;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.patient-list h2 {
+  color: #1565c0;
+  margin-bottom: 10px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #1565c0;
+  color: white;
+}
+.btn {
+  margin: 2px;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.edit {
+  background-color: #1565c0;
+  color: white;
+}
+
+.btn.save {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.btn.cancel {
+  background-color: #f9a825;
+  color: white;
+}
+
+.btn.delete {
+  background-color: #c62828;
+  color: white;
+}
+
+@media screen and (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .btn {
+    display: block;
+    margin: 3px auto;
+    width: 100%;
+  }
+}
+
