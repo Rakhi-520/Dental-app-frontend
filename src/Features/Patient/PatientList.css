@@ -1,0 +1,170 @@
+.form-container {
+  background: linear-gradient(to right, #e3f2fd, #ffffff);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  margin: auto;
+  margin-top: 40px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+fieldset {
+  border: 2px solid #90caf9;
+  border-radius: 10px;
+  background-color: #f0f7ff;
+  padding: 20px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  color: #1a237e;
+}
+
+legend {
+  font-weight: bold;
+  color: #0d47a1;
+  padding: 0 10px;
+  font-size: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #0d47a1;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  padding: 8px 12px;
+  margin-left: 10px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #1a237e;
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: fit-content;
+  cursor: pointer;
+  font-weight: bold;
+  align-self: flex-end;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0d47a1;
+}
+
+.quadrant-table {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.quadrant-table::-webkit-scrollbar {
+  width: 8px;
+}
+
+.quadrant-table::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.quadrant-table::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.tooth-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #1a237e;
+}
+
+.tooth-table th,
+.tooth-table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.tooth-table th {
+  background-color: #bbdefb;
+  color: #0d47a1;
+}
+
+h1{
+  text-align: center;
+  color: #0d47a1;
+  margin-bottom: 30px;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+select {
+  cursor: pointer;
+  color: #1a237e;
+}
+
+.ortho-table {
+  width: 100%;
+  margin-top: 10px;
+  color: #1a237e;
+}
+
+.ortho-table td {
+  padding: 10px 5px;
+  vertical-align: top;
+}
+
+.ortho-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+  color: #0d47a1;
+}
+
+@media (max-width: 600px) {
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  form {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    align-self: center;
+  }
+}

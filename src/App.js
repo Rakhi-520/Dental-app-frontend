@@ -1,42 +1,46 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import PatientList from './components/PatientList';
-import PatientForm from './components/PatientForm';
-import Modal from './components/Modal';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { UserRoleProvider } from './context/UserRoleContext';
+
+import Layout from './components/Layout';
+import LoginPage from './Pages/LoginPage';
+import Home from './Pages/Home';
+import PageAccessConfig from './Pages/PageAccessConfig';
+
+import PatientForm from './Features/Patient/PatientForm';
+import PatientList from './Features/Patient/PatientList'; 
+import CaseSheetViewer from './Features/Patient/CaseSheetViewer';
+import AppointmentPage from './Pages/Appointment';
+import StockPage from './Pages/Inventory';
+import FinancePage from './Pages/Finance';
+import PatientRecords from './Pages/PatientRecords'; 
 
 function App() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [refresh, setRefresh] = useState(false); // For reloading the list after add
-
-  const handleFormSubmit = () => {
-    setIsFormOpen(false);
-    setRefresh(!refresh); // Toggle refresh to reload patient list
-  };
-
   return (
-    <div className="App">
-      {/* Header with logo, banner, and clinic details */}
-      <Header />
+    <UserRoleProvider>
+      <Router>
+        <Routes>
+          {/* 🔓 Public Route */}
+          <Route path="/" element={<LoginPage />} />
 
-      {/* Add Patient Button */}
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button onClick={() => setIsFormOpen(true)} className="add-btn">
-          + Add New Patient
-        </button>
-      </div>
+          {/* 🔒 Protected Routes inside Layout */}
+          <Route element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/config" element={<PageAccessConfig />} />
+            <Route path="/patient-form" element={<PatientForm />} />
 
-      {/* Patient Table List */}
-      <PatientList refresh={refresh} />
+            {/* Patient Section */}
+            <Route path="/patient-records" element={<PatientRecords />} />
+            <Route path="/patients/list" element={<PatientList />} />
+            <Route path="/patients/:id" element={<CaseSheetViewer />} />
 
-      {/* Modal with Patient Form */}
-      <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
-        <PatientForm
-          onSuccess={handleFormSubmit}
-          onCancel={() => setIsFormOpen(false)}
-        />
-      </Modal>
-    </div>
+            {/* Other Modules */}
+            <Route path="/appointments" element={<AppointmentPage />} />
+            <Route path="/stock" element={<StockPage />} />
+            <Route path="/finance" element={<FinancePage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </UserRoleProvider>
   );
 }
 
