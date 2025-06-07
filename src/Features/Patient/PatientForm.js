@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useState, useEffect, useRef } from 'react';
+// import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
 import './PatientForm.css';
 import toothChartImg from '../../assets/tooth-chart-img.png';
 
@@ -29,8 +29,8 @@ const PatientForm = () => {
   });
 
   const [selectedTooth, setSelectedTooth] = useState(null);
-  const [toothNote, setToothNote] = useState('');
   const [toothProblem, setToothProblem] = useState('');
+  const [toothNote, setToothNote] = useState('');
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -44,40 +44,6 @@ const PatientForm = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleOrthoChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      orthoProfile: {
-        ...prev.orthoProfile,
-        [name]: value
-      }
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      uploadedFiles: Array.from(e.target.files)
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post('http://localhost:5000/api/patients', formData)
-      .then(res => {
-        alert('Patient saved successfully!');
-      })
-      .catch(err => {
-        console.error('Error saving patient:', err);
-      });
-  };
-
   const handleToothClick = (toothNum) => {
     setSelectedTooth(toothNum);
     const existing = formData.toothConditions[toothNum];
@@ -86,6 +52,7 @@ const PatientForm = () => {
   };
 
   const handleToothSave = () => {
+    if (!selectedTooth) return;
     setFormData(prev => ({
       ...prev,
       toothConditions: {
@@ -94,60 +61,88 @@ const PatientForm = () => {
       }
     }));
     setSelectedTooth(null);
-    setToothNote('');
     setToothProblem('');
+    setToothNote('');
   };
 
   const handleToothClose = () => {
     setSelectedTooth(null);
-    setToothNote('');
     setToothProblem('');
+    setToothNote('');
   };
-
-  const renderToothChart = () => {
-const toothButtonPositions = {
-  // Upper right (18–11)
-  18: { top: 250, left: 54},
-  17: { top: 250, left: 100 },
-  16: { top: 250, left: 150 },
-  15: { top: 250, left: 200 },
-  14: { top: 250, left: 244 },
-  13: { top: 250, left: 294 },
-  12: { top: 250, left: 344 },
-  11: { top: 250, left: 390 },
-
-  // Upper left (21–28)
-  21: { top: 250, left: 478 },
-  22: { top: 250, left: 524 },
-  23: { top: 250, left: 570 },
-  24: { top: 250, left: 616 },
-  25: { top: 250, left: 662 },
-  26: { top: 250, left: 708},
-  27: { top: 250, left: 756},
-  28: { top: 250, left: 802},
-
-  // Lower right (48–41)
-  48: { top: 380, left: 62 },
-  47: { top: 380, left: 106 },
-  46: { top: 380, left: 156 },
-  45: { top: 380, left: 200 },
-  44: { top: 380, left: 250 },
-  43: { top: 380, left: 300 },
-  42: { top: 380, left: 348 },
-  41: { top: 380, left: 394 },
-
-  // Lower left (31–38)
-  31: { top: 380, left: 480 },
-  32: { top: 380, left: 526 },
-  33: { top: 380, left: 574 },
-  34: { top: 380, left: 622 },
-  35: { top: 380, left: 670 },
-  36: { top: 380, left: 714 },
-  37: { top: 380, left: 760 },
-  38: { top: 380, left: 806 }
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+const handleOrthoChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    orthoProfile: {
+      ...prev.orthoProfile,
+      [name]: value,
+    },
+  }));
 };
 
 
+const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log('Form submitted:', formData);
+  // Add axios.post call here if needed
+};
+
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    uploadedFiles: [...prevFormData.uploadedFiles, ...files]
+  }));
+};
+
+
+  const renderToothChart = () => {
+    const toothButtonPositions = {
+          18: { top: 250, left: 54 },    
+      17: { top: 250, left: 100 }, 
+      16: { top: 250, left: 150 },
+      15: { top: 250, left: 200 }, 
+      14: { top: 250, left: 244 }, 
+      13: { top: 250, left: 294 },
+      12: { top: 250, left: 344 }, 
+      11: { top: 250, left: 390 }, 
+      
+      21: { top: 250, left: 478 },
+      22: { top: 250, left: 524 },
+      23: { top: 250, left: 570 },
+      24: { top: 250, left: 616 },
+      25: { top: 250, left: 662 }, 
+      26: { top: 250, left: 708 }, 
+      27: { top: 250, left: 756 },
+      28: { top: 250, left: 802 }, 
+      
+     
+      31: { top: 380, left: 480 }, 
+      32: { top: 380, left: 526 }, 
+      33: { top: 380, left: 574 },
+      34: { top: 380, left: 622 },
+      35: { top: 380, left: 670 }, 
+      36: { top: 380, left: 714 },
+      37: { top: 380, left: 760 },
+      38: { top: 380, left: 806 },
+
+      48: { top: 380, left: 62 }, 
+      47: { top: 380, left: 106 },
+      46: { top: 380, left: 156 },
+      45: { top: 380, left: 200 },
+      44: { top: 380, left: 250 },
+      43: { top: 380, left: 300 }, 
+      42: { top: 380, left: 348 }, 
+      41: { top: 380, left: 394 }
+    };
 
     return (
       <div className="tooth-chart-wrapper">
@@ -156,7 +151,7 @@ const toothButtonPositions = {
           <button
             key={tooth}
             className={`tooth-btn-overlay ${formData.toothConditions[tooth] ? 'highlighted' : ''}`}
-            style={{ top: `${pos.top}px`, left: `${pos.left}px` }}
+            style={{ top: `${pos.top}px`, left: `${pos.left}px`, backgroundColor: formData.toothConditions[tooth] ? 'red' : '' }}
             onClick={() => handleToothClick(tooth)}
           >
             {tooth}
@@ -186,9 +181,11 @@ const toothButtonPositions = {
     );
   };
 
-   return (
+  return (
     <div className="form-container">
-       <h1>Dental OP Case Sheet</h1>
+           {/* Dental OP Case Sheet */}
+      
+      <h1>Dental OP Case Sheet</h1>
       <form onSubmit={handleSubmit}>
           <fieldset>
   <legend>Patient Information</legend>
@@ -520,8 +517,7 @@ const toothButtonPositions = {
             + Add Row
           </button>
         </fieldset>
-
-       <button type="submit">Save Patient Record</button>
+      <button type="submit" onClick={handleSubmit}>Save Patient Record</button>
       </form>
     </div>
   );
