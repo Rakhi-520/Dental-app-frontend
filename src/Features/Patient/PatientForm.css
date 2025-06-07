@@ -81,14 +81,15 @@ button,
   cursor: pointer;
   font-weight: bold;
   align-self: flex-end;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease; 
 }
 
 button:hover,
 .add-btn:hover {
-  background-color: #005b66 !important;
-  transform: scale(1.02);
+  background-color: #afb9cd !important;
+  color: black
 }
+
 
 .quadrant-table {
   max-height: 200px;
@@ -100,35 +101,6 @@ button:hover,
   border-radius: 6px;
 }
 
-.quadrant-table::-webkit-scrollbar {
-  width: 8px;
-}
-
-.quadrant-table::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
-}
-
-.quadrant-table::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-.tooth-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tooth-table th,
-.tooth-table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-}
-
-.tooth-table th {
-  background-color: #b2ebf2;
-  color: #004d40;
-}
 
 h2 {
   text-align: center;
@@ -149,4 +121,64 @@ h2 {
     width: 100%;
     align-self: center;
   }
+}
+.tooth-chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* 👈 Adjusted to smaller width */
+  margin: 0 auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.tooth-chart-bg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+.tooth-btn-overlay {
+  position: absolute;
+  padding: 4px 6px;
+  font-size: 11px;
+  background-color: #fff;
+  border: 1px solid #666;
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.tooth-btn-overlay.highlighted {
+  background-color: #e53935;
+  color: white;
+  font-weight: bold;
+}
+
+.tooth-popup {
+  margin-top: 1rem;
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.tooth-popup-actions button {
+  margin-right: 10px;
+}
+
+.tooth-chart-section {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.tooth-chart-section.hidden {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
 }

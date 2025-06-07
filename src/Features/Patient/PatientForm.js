@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import './PatientForm.css';
+import toothChartImg from '../../assets/tooth-chart-img.png';
+
+const problemOptions = ['Caries', 'Mobility', 'Periodontitis', 'Prosthesis'];
 
 const PatientForm = () => {
   const [formData, setFormData] = useState({
@@ -20,15 +23,20 @@ const PatientForm = () => {
       facialProfile: '', lipCompetency: '', overjet: '', overbite: '',
       habits: '', molarRelation: '', crossbite: '', openbite: ''
     },
-    prescriptions: []
+    prescriptions: [],
+    toothConditions: {},
+    showToothChart: false
   });
 
+  const [selectedTooth, setSelectedTooth] = useState(null);
+  const [toothNote, setToothNote] = useState('');
+  const [toothProblem, setToothProblem] = useState('');
   const tableRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (tableRef.current && !tableRef.current.contains(event.target) &&
-          !event.target.closest('select[name="selectedQuadrant"]')) {
+        !event.target.closest('select[name="selectedQuadrant"]')) {
         setFormData(prev => ({ ...prev, showTable: false }));
       }
     };
@@ -45,81 +53,144 @@ const PatientForm = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      orthoProfile: { ...prev.orthoProfile, [name]: value }
+      orthoProfile: {
+        ...prev.orthoProfile,
+        [name]: value
+      }
     }));
   };
 
   const handleFileChange = (e) => {
-    setFormData(prev => ({ ...prev, uploadedFiles: Array.from(e.target.files) }));
-  };
-
-  const handleQuadrantSelect = (e) => {
     setFormData(prev => ({
       ...prev,
-      selectedQuadrant: e.target.value,
-      showTable: true
+      uploadedFiles: Array.from(e.target.files)
     }));
   };
 
-  const handleToothCheckboxChange = (quadrant, index, field) => {
-    const updatedTeeth = [...formData.clinicalFindings[quadrant]];
-    updatedTeeth[index] = { ...updatedTeeth[index], [field]: !updatedTeeth[index][field] };
-    setFormData(prev => ({
-      ...prev,
-      clinicalFindings: { ...prev.clinicalFindings, [quadrant]: updatedTeeth }
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/patients', formData);
-      alert('Patient data saved successfully!');
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error saving patient:', error);
-      alert('Failed to save patient.');
-    }
+    axios.post('http://localhost:5000/api/patients', formData)
+      .then(res => {
+        alert('Patient saved successfully!');
+      })
+      .catch(err => {
+        console.error('Error saving patient:', err);
+      });
   };
 
-  const renderQuadrantTable = (quadrant) => (
-    <div ref={tableRef} className="quadrant-table">
-      <table className="tooth-table">
-        <thead>
-          <tr>
-            <th>Tooth No.</th>
-            <th>Cavity</th>
-            <th>Mobility</th>
-            <th>Missing</th>
-            <th>Filling</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formData.clinicalFindings[quadrant].map((tooth, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              {['cavity', 'mobility', 'missing', 'filling'].map(field => (
-                <td key={field}>
-                  <input
-                    type="checkbox"
-                    checked={tooth[field]}
-                    onChange={() => handleToothCheckboxChange(quadrant, index, field)}
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  const handleToothClick = (toothNum) => {
+    setSelectedTooth(toothNum);
+    const existing = formData.toothConditions[toothNum];
+    setToothProblem(existing?.problem || '');
+    setToothNote(existing?.notes || '');
+  };
 
-  return (
+  const handleToothSave = () => {
+    setFormData(prev => ({
+      ...prev,
+      toothConditions: {
+        ...prev.toothConditions,
+        [selectedTooth]: { problem: toothProblem, notes: toothNote }
+      }
+    }));
+    setSelectedTooth(null);
+    setToothNote('');
+    setToothProblem('');
+  };
+
+  const handleToothClose = () => {
+    setSelectedTooth(null);
+    setToothNote('');
+    setToothProblem('');
+  };
+
+  const renderToothChart = () => {
+const toothButtonPositions = {
+  // Upper right (18–11)
+  18: { top: 250, left: 54},
+  17: { top: 250, left: 100 },
+  16: { top: 250, left: 150 },
+  15: { top: 250, left: 200 },
+  14: { top: 250, left: 244 },
+  13: { top: 250, left: 294 },
+  12: { top: 250, left: 344 },
+  11: { top: 250, left: 390 },
+
+  // Upper left (21–28)
+  21: { top: 250, left: 478 },
+  22: { top: 250, left: 524 },
+  23: { top: 250, left: 570 },
+  24: { top: 250, left: 616 },
+  25: { top: 250, left: 662 },
+  26: { top: 250, left: 708},
+  27: { top: 250, left: 756},
+  28: { top: 250, left: 802},
+
+  // Lower right (48–41)
+  48: { top: 380, left: 62 },
+  47: { top: 380, left: 106 },
+  46: { top: 380, left: 156 },
+  45: { top: 380, left: 200 },
+  44: { top: 380, left: 250 },
+  43: { top: 380, left: 300 },
+  42: { top: 380, left: 348 },
+  41: { top: 380, left: 394 },
+
+  // Lower left (31–38)
+  31: { top: 380, left: 480 },
+  32: { top: 380, left: 526 },
+  33: { top: 380, left: 574 },
+  34: { top: 380, left: 622 },
+  35: { top: 380, left: 670 },
+  36: { top: 380, left: 714 },
+  37: { top: 380, left: 760 },
+  38: { top: 380, left: 806 }
+};
+
+
+
+    return (
+      <div className="tooth-chart-wrapper">
+        <img src={toothChartImg} alt="Tooth Chart" className="tooth-chart-bg" />
+        {Object.entries(toothButtonPositions).map(([tooth, pos]) => (
+          <button
+            key={tooth}
+            className={`tooth-btn-overlay ${formData.toothConditions[tooth] ? 'highlighted' : ''}`}
+            style={{ top: `${pos.top}px`, left: `${pos.left}px` }}
+            onClick={() => handleToothClick(tooth)}
+          >
+            {tooth}
+          </button>
+        ))}
+        {selectedTooth && (
+          <div className="tooth-popup">
+            <h4>Tooth {selectedTooth}</h4>
+            <label>
+              Problem:
+              <select value={toothProblem} onChange={(e) => setToothProblem(e.target.value)}>
+                <option value="">--Select--</option>
+                {problemOptions.map(opt => <option key={opt}>{opt}</option>)}
+              </select>
+            </label>
+            <label>
+              Description:
+              <textarea value={toothNote} onChange={(e) => setToothNote(e.target.value)} rows={3} />
+            </label>
+            <div className="tooth-popup-actions">
+              <button onClick={handleToothSave}>Save</button>
+              <button onClick={handleToothClose}>Close</button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+   return (
     <div className="form-container">
-      <h1>Dental OP Case Sheet</h1>
+       <h1>Dental OP Case Sheet</h1>
       <form onSubmit={handleSubmit}>
-       {/* Patient Info */}
-        <fieldset>
+          <fieldset>
   <legend>Patient Information</legend>
 
   <div className="form-row">
@@ -223,23 +294,32 @@ const PatientForm = () => {
           <label>Others: <input type="text" name="dhOther" value={formData.dhOther} onChange={handleChange} /></label>
         </fieldset>
 
-        {/* Clinical Findings */}
-        <fieldset>
-          <legend>Clinical Findings</legend>
-          <label>Quadrant:
-            <select name="selectedQuadrant" value={formData.selectedQuadrant} onChange={handleQuadrantSelect}>
-              <option value="">--Select Quadrant--</option>
-              <option value="first">First Quadrant</option>
-              <option value="second">Second Quadrant</option>
-              <option value="third">Third Quadrant</option>
-              <option value="fourth">Fourth Quadrant</option>
-            </select>
-          </label>
-          {formData.showTable && renderQuadrantTable(formData.selectedQuadrant)}
-        </fieldset>
-      <fieldset>
+       {/* Oral Findings */}
+<fieldset className="form-section">
+  <legend className="section-title">Oral Findings</legend>
 
-  {/*  Ortho Profile*/}
+  {<button
+    type="button"
+    className="tooth-chart-toggle-btn"
+    onClick={() =>
+      setFormData((prev) => ({ ...prev, showToothChart: !prev.showToothChart }))
+    }
+  >
+    {formData.showToothChart ? 'Hide Tooth Chart' : 'Show Tooth Chart'}
+  </button> }
+ 
+
+
+  {formData.showToothChart && (
+    <div className={`tooth-chart-section ${!formData.showToothChart ? 'hidden' : ''}`}>
+  <h4>Interactive Tooth Chart</h4>
+  {renderToothChart()}
+</div>
+
+  )}
+</fieldset>
+
+<fieldset>
   <legend>Ortho Profile</legend>
 
   <div className="form-row">
@@ -375,117 +455,77 @@ const PatientForm = () => {
             </label>
           )}
         </fieldset>
-     
-     {/* Prescriptions */}
-
-      <fieldset>
-        <legend>Prescriptions</legend>
-        <table className="prescription-table">
-          
-          <tbody>
-            {formData.prescriptions.map((prescription, index) => (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    placeholder="Medicine Name"
-                    value={prescription.drugName}
-                    onChange={(e) => {
-                      const updated = [...formData.prescriptions];
-                      updated[index].drugName = e.target.value;
-                      setFormData({ ...formData, prescriptions: updated });
-                    }}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    placeholder="Dosage"
-                    value={prescription.dosage}
-                    onChange={(e) => {
-                      const updated = [...formData.prescriptions];
-                      updated[index].dosage = e.target.value;
-                      setFormData({ ...formData, prescriptions: updated });
-                    }}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    placeholder="Duration"
-                    value={prescription.duration}
-                    onChange={(e) => {
-                      const updated = [...formData.prescriptions];
-                      updated[index].duration = e.target.value;
-                      setFormData({ ...formData, prescriptions: updated });
-                    }}
-                  />
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => {
+        {/* Add Prescription Table */}
+        <fieldset>
+          <legend>Prescriptions</legend>
+          <table className="prescription-table">
+            <tbody>
+              {formData.prescriptions.map((prescription, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="Medicine Name"
+                      value={prescription.drugName}
+                      onChange={(e) => {
+                        const updated = [...formData.prescriptions];
+                        updated[index].drugName = e.target.value;
+                        setFormData({ ...formData, prescriptions: updated });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="Dosage"
+                      value={prescription.dosage}
+                      onChange={(e) => {
+                        const updated = [...formData.prescriptions];
+                        updated[index].dosage = e.target.value;
+                        setFormData({ ...formData, prescriptions: updated });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="Duration"
+                      value={prescription.duration}
+                      onChange={(e) => {
+                        const updated = [...formData.prescriptions];
+                        updated[index].duration = e.target.value;
+                        setFormData({ ...formData, prescriptions: updated });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => {
                       const updated = formData.prescriptions.filter((_, i) => i !== index);
                       setFormData({ ...formData, prescriptions: updated });
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button
-          type="button"
-          onClick={() =>
-            setFormData({
-              ...formData,
-              prescriptions: [
-                ...formData.prescriptions,
-                { medicineName: '', dosage: '', duration: '' },
-              ],
-            })
-          }
-        >
-          + Add Row
-        </button>
-      </fieldset>
-      <fieldset>
-  <legend>Department Details</legend>
+                    }}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({
+                ...formData,
+                prescriptions: [...formData.prescriptions, { drugName: '', dosage: '', duration: '' }]
+              })
+            }
+          >
+            + Add Row
+          </button>
+        </fieldset>
 
-  <label>
-    Department:
-    <select name="department" value={formData.department} onChange={handleChange}>
-      <option value="">--Select--</option>
-      <option value="Pedodontics">Pedodontics</option>
-      <option value="Orthodontics">Orthodontics</option>
-      <option value="Conservative Dentistry">Conservative Dentistry</option>
-      <option value="Periodontics">Periodontics</option>
-      <option value="Oral Surgery">Oral Surgery</option>
-      <option value="Prosthodontics">Prosthodontics</option>
-      <option value="Oral Medicine & Radiology">Oral Medicine & Radiology</option>
-      <option value="Endodontics">Endodontics</option>
-    </select>
-  </label>
-
-  <label>
-    Dentist's Name:
-    <input
-      type="text"
-      name="dentistName"
-      value={formData.dentistName}
-      onChange={handleChange}
-      placeholder="Dr. "
-    />
-  </label>
-</fieldset>
-
-        
-        <button type="submit">Save Patient</button>
+       <button type="submit">Save Patient Record</button>
       </form>
     </div>
   );
 };
+
 
 export default PatientForm;

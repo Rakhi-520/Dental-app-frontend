@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
   Grid,
+  Paper,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-  Box
+  Typography,
 } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import ImportantNotePR from '../components/ImportantNotePR';
 
-// ✅ Reusable CustomCard Component
+// Reusable Card Component
 const CustomCard = ({
   icon,
   title,
@@ -26,7 +27,7 @@ const CustomCard = ({
   onClick,
   color,
   cardHeight,
-  cardWidth
+  cardWidth,
 }) => (
   <Card
     sx={{
@@ -66,20 +67,19 @@ const PatientRecords = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [recentPatients, setRecentPatients] = useState([]);
-  const [notes, setNotes] = useState('');
 
   useEffect(() => {
     const today = new Date().toISOString().slice(0, 10);
 
     setAppointments([
       { time: '10:00 AM', name: 'Amit Shah', dept: 'Ortho', note: 'Braces check' },
-      { time: '11:30 AM', name: 'Sara Ali', dept: 'General', note: 'Tooth cleaning' }
+      { time: '11:30 AM', name: 'Sara Ali', dept: 'General', note: 'Tooth cleaning' },
     ]);
 
     setRecentPatients([
       { name: 'Ravi Kumar', age: 32, phone: '9999999999', date: today, diagnosis: 'Cavity' },
       { name: 'Anjali Menon', age: 25, phone: '8888888888', date: today, diagnosis: 'Root Canal' },
-      { name: 'Suresh Raina', age: 40, phone: '7777777777', date: today, diagnosis: 'Scaling' }
+      { name: 'Suresh Raina', age: 40, phone: '7777777777', date: today, diagnosis: 'Scaling' },
     ]);
   }, []);
 
@@ -89,18 +89,18 @@ const PatientRecords = () => {
         Patient Records
       </Typography>
 
-      {/* Cards Section with 3 Equal Cards in One Row */}
+      {/* Top Cards Section */}
       <Grid container spacing={3} mb={4}>
         <Grid item xs={12} md={4}>
           <CustomCard
             icon={<NoteAddIcon color="primary" />}
             title="New Case Sheet"
-            description="Start a new case sheet entry for a patient."
-            buttonLabel="Open Form"
+            description="Start a new case sheet entry "
+            buttonLabel="Open"
             onClick={() => navigate('/patient-form')}
             color="primary"
             cardHeight="220px"
-            cardWidth="370px"
+            cardWidth="360px"
           />
         </Grid>
 
@@ -113,15 +113,15 @@ const PatientRecords = () => {
             onClick={() => navigate('/patients/list')}
             color="secondary"
             cardHeight="220px"
-            cardWidth="370px"
+            cardWidth="360px"
           />
         </Grid>
 
         <Grid item xs={12} md={4}>
           <Card
             sx={{
-              height: '220px',
-              width: '370px',
+              height: '190px',
+              width: '360px',
               borderRadius: 5,
               boxShadow: '0 4px 18px rgba(0,0,0,0.12)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -129,39 +129,24 @@ const PatientRecords = () => {
                 transform: 'scale(1.02)',
                 boxShadow: '4px 10px 24px rgba(0,0,0,0.15)',
               },
-              backgroundColor: '#ffffff',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
-              padding: `0,0,1,0`,
+              justifyContent: 'center',
+              p: 2,
             }}
           >
-            <CardContent sx={{ flexGrow:3}}>
-              <Typography variant="h6" fontWeight={600} mb={1}>
-                Important Notes
-              </Typography>
-
-              <textarea
-                rows={6}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                style={{
-                  width: '98%',
-                  resize: 'none',
-                  padding: '1px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc',
-                  fontFamily: 'inherit',
-                  fontSize: '0.9rem',
-                }}
-                placeholder="Type here..."
-              />
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Grid container spacing={3} sx={{ mt: 1 }}>
+                <Grid item xs={12}>
+                  <ImportantNotePR />
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
-      {/* Today's Appointments */}
+      {/* Appointments */}
       <Typography variant="h5" fontWeight="medium" mb={2}>
         Today’s Appointments
       </Typography>
