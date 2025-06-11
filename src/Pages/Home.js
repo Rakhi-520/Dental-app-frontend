@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserRole } from '../context/UserRoleContext';
 import './Home.css';
@@ -30,102 +30,103 @@ const Home = () => {
     lab: {},
   };
 
-  const allLinks = [
-    {
-      title: 'Patient Records',
-      route: '/patient-records',
-      key: 'patientRecords',
-      icon: <MedicalServicesIcon fontSize="large" style={{ color: '#0077b6' }} />,
-      pageApiKey: 'patient-records',
-      localKey: 'important_note_pr_draft'
-    },
-    {
-      title: 'Appointments',
-      route: '/appointments',
-      key: 'appointments',
-      icon: <EventAvailableIcon fontSize="large" style={{ color: '#0077b6' }} />,
-      pageApiKey: 'appointments',
-      localKey: 'important_note_appointments_draft'
-    },
-    {
-      title: 'AI Dental Assistant',
-      route: '/ai-assistant',
-      key: 'aiAssistant',
-      icon: <SmartToyIcon fontSize="large" style={{ color: '#0077b6' }} />,
-    },
-    {
-      title: 'Finance & Billing',
-      route: '/finance',
-      key: 'finance',
-      icon: <AttachMoneyIcon fontSize="large" style={{ color: '#0077b6' }} />,
-      pageApiKey: 'finance',
-      localKey: 'important_note_finance_draft'
-    },
-    {
-      title: 'Inventory Management',
-      route: '/stock',
-      key: 'inventory',
-      icon: <Inventory2Icon fontSize="large" style={{ color: '#0077b6' }} />,
-      pageApiKey: 'inventory',
-      localKey: 'important_note_inventory_draft'
-    },
-    {
-      title: 'Lab Records',
-      route: '/lab-records',
-      key: 'lab',
-      icon: (
-        <img
-          src={require('../assets/tooth-icon.png')}
-          alt="Tooth Icon"
-          style={{
-            width: 40,
-            height: 40,
-            filter:
-              'invert(37%) sepia(94%) saturate(506%) hue-rotate(169deg) brightness(96%) contrast(91%)',
-          }}
-        />
-      ),
-      pageApiKey: 'lab',
-      localKey: 'important_note_lab_draft'
-    },
-    {
-      title: 'Illustrations',
-      route: '/illustrations',
-      key: 'illustrations',
-      icon: <ImageIcon fontSize="large" style={{ color: '#0077b6' }} />,
-    },
-    {
-      title: 'Dental Diary',
-      route: '/notes',
-      key: 'notes',
-      icon: <MenuBookIcon fontSize="large" style={{ color: '#0077b6' }} />,
-    },
-    {
-      title: 'Access Settings',
-      route: '/config',
-      key: 'config',
-      icon: <SettingsIcon fontSize="large" style={{ color: '#0077b6' }} />,
-    },
-  ];
+ const allLinks = useMemo(() => ([
+  {
+    title: 'Patient Records',
+    route: '/patient-records',
+    key: 'patientRecords',
+    icon: <MedicalServicesIcon fontSize="large" style={{ color: '#0077b6' }} />,
+    pageApiKey: 'patient-records',
+    localKey: 'important_note_pr_draft'
+  },
+  {
+    title: 'Appointments',
+    route: '/appointments',
+    key: 'appointments',
+    icon: <EventAvailableIcon fontSize="large" style={{ color: '#0077b6' }} />,
+    pageApiKey: 'appointments',
+    localKey: 'important_note_appointments_draft'
+  },
+  {
+    title: 'AI Dental Assistant',
+    route: '/ai-assistant',
+    key: 'aiAssistant',
+    icon: <SmartToyIcon fontSize="large" style={{ color: '#0077b6' }} />,
+  },
+  {
+    title: 'Finance & Billing',
+    route: '/finance',
+    key: 'finance',
+    icon: <AttachMoneyIcon fontSize="large" style={{ color: '#0077b6' }} />,
+    pageApiKey: 'finance',
+    localKey: 'important_note_finance_draft'
+  },
+  {
+    title: 'Inventory Management',
+    route: '/stock',
+    key: 'inventory',
+    icon: <Inventory2Icon fontSize="large" style={{ color: '#0077b6' }} />,
+    pageApiKey: 'inventory',
+    localKey: 'important_note_inventory_draft'
+  },
+  {
+    title: 'Lab Records',
+    route: '/lab-records',
+    key: 'lab',
+    icon: (
+      <img
+        src={require('../assets/tooth-icon.png')}
+        alt="Tooth Icon"
+        style={{
+          width: 40,
+          height: 40,
+          filter: 'invert(37%) sepia(94%) saturate(506%) hue-rotate(169deg) brightness(96%) contrast(91%)',
+        }}
+      />
+    ),
+    pageApiKey: 'lab',
+    localKey: 'important_note_lab_draft'
+  },
+  {
+    title: 'Illustrations',
+    route: '/illustrations',
+    key: 'illustrations',
+    icon: <ImageIcon fontSize="large" style={{ color: '#0077b6' }} />,
+  },
+  {
+    title: 'Dental Diary',
+    route: '/notes',
+    key: 'notes',
+    icon: <MenuBookIcon fontSize="large" style={{ color: '#0077b6' }} />,
+  },
+  {
+    title: 'Access Settings',
+    route: '/config',
+    key: 'config',
+    icon: <SettingsIcon fontSize="large" style={{ color: '#0077b6' }} />,
+  },
+]), []);
 
-  const getLocalImportantNotes = () => {
-    const notes = {};
-    allLinks.forEach(link => {
-      if (link.localKey) {
-        const value = localStorage.getItem(link.localKey);
-        if (value && value.trim() !== '') {
-          notes[link.pageApiKey] = value;
-        }
-      }
-    });
-    return notes;
-  };
 
   useEffect(() => {
     if (safeRole !== 'admin') return;
-    const localNotes = getLocalImportantNotes();
+
+    const getNotes = () => {
+      const notes = {};
+      allLinks.forEach(link => {
+        if (link.localKey) {
+          const value = localStorage.getItem(link.localKey);
+          if (value && value.trim() !== '') {
+            notes[link.pageApiKey] = value;
+          }
+        }
+      });
+      return notes;
+    };
+
+    const localNotes = getNotes();
     setImportantNotes(localNotes);
-  }, [safeRole]);
+  }, [safeRole, allLinks]);
 
   const toggleNoteView = (pageKey) => {
     setOpenNotePage(prev => (prev === pageKey ? null : pageKey));
@@ -245,13 +246,28 @@ const Home = () => {
             >
               <div style={{ marginBottom: '0.5rem' }}>{link.icon}</div>
               <h3>{link.title}</h3>
-              <button disabled={!isAllowed}>
-                {isAllowed ? 'Go' : '🔒'}
-              </button>
+              <button
+  disabled={!isAllowed}
+  style={{
+    backgroundColor: hasPageNote ? '#c62828': '#0d8ca6', // Red if note exists
+    color: 'white',
+    border: 'none',
+    borderRadius: '20px',
+    padding: '6px 16px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    cursor: isAllowed ? 'pointer' : 'not-allowed',
+    marginTop: '10px',
+    width: '90px',
+    alignSelf: 'center',   
+    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+    transition: 'background-color 0.3s ease'
+    
+  }}
+>
+  {isAllowed ? 'Go' : '🔒'}
+</button>
 
-              {hasPageNote && (
-                <span className="important-indicator"></span>
-              )}
             </div>
           );
         })}

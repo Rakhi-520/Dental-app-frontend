@@ -1,70 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import { Card, CardContent, Typography, Button, Grid, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 import ImportantNotePR from '../components/ImportantNotePR';
-
-// Reusable Card Component
-const CustomCard = ({
-  icon,
-  title,
-  description,
-  buttonLabel,
-  onClick,
-  color,
-  cardHeight,
-  cardWidth,
-}) => (
-  <Card
-    sx={{
-      height: cardHeight || '220px',
-      width: cardWidth || '100%',
-      borderRadius: 5,
-      boxShadow: '0 4px 18px rgba(0,0,0,0.12)',
-      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-      '&:hover': {
-        transform: 'scale(1.02)',
-        boxShadow: '4px 10px 24px rgba(0,0,0,0.15)',
-      },
-      backgroundColor: '#ffffff',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    }}
-  >
-    <CardContent>
-      <Box display="flex" alignItems="center" mb={1}>
-        {icon}
-        <Typography variant="h6" ml={1} fontWeight={600}>
-          {title}
-        </Typography>
-      </Box>
-      <Typography variant="body2" color="text.secondary" mb={2}>
-        {description}
-      </Typography>
-      <Button variant="contained" color={color || 'primary'} onClick={onClick}>
-        {buttonLabel}
-      </Button>
-    </CardContent>
-  </Card>
-);
 
 const PatientRecords = () => {
   const navigate = useNavigate();
+
   const [appointments, setAppointments] = useState([]);
   const [recentPatients, setRecentPatients] = useState([]);
 
@@ -73,91 +14,119 @@ const PatientRecords = () => {
 
     setAppointments([
       { time: '10:00 AM', name: 'Amit Shah', dept: 'Ortho', note: 'Braces check' },
-      { time: '11:30 AM', name: 'Sara Ali', dept: 'General', note: 'Tooth cleaning' },
+      { time: '11:30 AM', name: 'Sara Ali', dept: 'General', note: 'Tooth cleaning' }
     ]);
 
     setRecentPatients([
       { name: 'Ravi Kumar', age: 32, phone: '9999999999', date: today, diagnosis: 'Cavity' },
       { name: 'Anjali Menon', age: 25, phone: '8888888888', date: today, diagnosis: 'Root Canal' },
       { name: 'Suresh Raina', age: 40, phone: '7777777777', date: today, diagnosis: 'Scaling' },
+      { name: 'Fatima Noor', age: 30, phone: '6666666666', date: today, diagnosis: 'Extraction' },
+      { name: 'Vikram Das', age: 29, phone: '5555555555', date: today, diagnosis: 'Crown' }
     ]);
   }, []);
 
   return (
-    <Box sx={{ padding: '30px' }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
+    <div style={{ padding: '20px' }}>
+      <Typography variant="h4" gutterBottom>
         Patient Records
       </Typography>
 
-      {/* Top Cards Section */}
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={4}>
-          <CustomCard
-            icon={<NoteAddIcon color="primary" />}
-            title="New Case Sheet"
-            description="Start a new case sheet entry "
-            buttonLabel="Open"
-            onClick={() => navigate('/patient-form')}
-            color="primary"
-            cardHeight="220px"
-            cardWidth="360px"
-          />
+      {/* Top Cards */}
+
+      <Grid container spacing={10}>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ 
+            backgroundColor: 'White', 
+            borderRadius: '12px',
+            width: '100%', 
+            height: '250px',   
+            padding: '16px',    
+           }}>
+            <CardContent>
+              <Typography variant="h6">New Case Sheet</Typography>
+              <Typography variant="body2" gutterBottom>
+                Start a new case sheet.
+              </Typography>
+             <Button
+  variant="contained"
+  onClick={() => navigate('/patient-form')}
+  sx={{
+    backgroundColor: '#0d8ca6',
+    '&:hover': {
+      backgroundColor: '#0c7a92' // optional: darker on hover
+    }
+  }}
+>
+  OPEN
+</Button>
+
+            </CardContent>
+          </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <CustomCard
-            icon={<ListAltIcon color="secondary" />}
-            title="Patient List"
-            description="View and manage all patient list."
-            buttonLabel="View List"
-            onClick={() => navigate('/patients/list')}
-            color="secondary"
-            cardHeight="220px"
-            cardWidth="360px"
-          />
+        <Grid item xs={12} md={8}>
+          <Card sx={{ backgroundColor: 'White', 
+            borderRadius: '12px', 
+            width: '100%',
+            height: '250px',
+            padding: '16px', 
+
+            }}>
+            <CardContent>
+              <Typography variant="h6">Patient List</Typography>
+              <Typography variant="body2" gutterBottom>
+                View and manage all patient list.
+              </Typography>
+             <Button
+  variant="contained"
+  onClick={() => navigate('/patient-form')}
+  sx={{
+    backgroundColor: '#0d8ca6',
+    '&:hover': {
+      backgroundColor: '#0c7a92' // optional: darker on hover
+    }
+  }}
+>
+  OPEN
+</Button>
+
+            </CardContent>
+          </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              height: '190px',
-              width: '360px',
-              borderRadius: 5,
-              boxShadow: '0 4px 18px rgba(0,0,0,0.12)',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.02)',
-                boxShadow: '4px 10px 24px rgba(0,0,0,0.15)',
-              },
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              p: 2,
-            }}
-          >
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Grid container spacing={3} sx={{ mt: 1 }}>
-                <Grid item xs={12}>
-                  <ImportantNotePR />
-                </Grid>
-              </Grid>
+        <Grid item xs={12} md={6}>
+         <Card
+  sx={{
+    backgroundColor: '#ffdddd',
+    borderRadius: '16px',
+    width: '100%',
+    height: '250px',
+    padding: '16px ',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+  }}
+>
+
+           <CardContent sx={{ paddingRight: 3, paddingLeft: 2, paddingBottom: 2 }}>
+
+              <ImportantNotePR />
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
-      {/* Appointments */}
-      <Typography variant="h5" fontWeight="medium" mb={2}>
+      {/* Appointments Section */}
+      <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
         Today’s Appointments
       </Typography>
-      <Paper elevation={3} sx={{ overflowX: 'auto', mb: 4 }}>
+      <Paper elevation={3}>
         <Table>
-          <TableHead sx={{ backgroundColor: '#e3f2fd' }}>
+          <TableHead>
             <TableRow>
-              <TableCell><strong>Time</strong></TableCell>
-              <TableCell><strong>Patient</strong></TableCell>
-              <TableCell><strong>Department</strong></TableCell>
-              <TableCell><strong>Note</strong></TableCell>
+              <TableCell>Time</TableCell>
+              <TableCell>Patient</TableCell>
+              <TableCell>Department</TableCell>
+              <TableCell>Note</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -173,19 +142,19 @@ const PatientRecords = () => {
         </Table>
       </Paper>
 
-      {/* Recent Patients */}
-      <Typography variant="h5" fontWeight="medium" mb={2}>
+      {/* Recent Patients Section */}
+      <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
         Recent Patients
       </Typography>
-      <Paper elevation={3} sx={{ overflowX: 'auto' }}>
+      <Paper elevation={3}>
         <Table>
-          <TableHead sx={{ backgroundColor: '#e3f2fd' }}>
+          <TableHead>
             <TableRow>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Age</strong></TableCell>
-              <TableCell><strong>Phone</strong></TableCell>
-              <TableCell><strong>Date</strong></TableCell>
-              <TableCell><strong>Diagnosis</strong></TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Age</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Diagnosis</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -201,7 +170,7 @@ const PatientRecords = () => {
           </TableBody>
         </Table>
       </Paper>
-    </Box>
+    </div>
   );
 };
 

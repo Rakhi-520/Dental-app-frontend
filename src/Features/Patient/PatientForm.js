@@ -162,10 +162,19 @@ const handleFileChange = (e) => {
             <h4>Tooth {selectedTooth}</h4>
             <label>
               Problem:
-              <select value={toothProblem} onChange={(e) => setToothProblem(e.target.value)}>
-                <option value="">--Select--</option>
-                {problemOptions.map(opt => <option key={opt}>{opt}</option>)}
-              </select>
+              <input
+                  type="text"
+                  list="problem-options"
+                  value={toothProblem}
+                  onChange={(e) => setToothProblem(e.target.value)}
+                  placeholder="Enter or select problem"
+              />
+              <datalist id="problem-options">
+              {problemOptions.map((opt) => (
+              <option key={opt} value={opt} />
+              ))}
+           </datalist>
+
             </label>
             <label>
               Description:
@@ -522,6 +531,4 @@ const handleFileChange = (e) => {
     </div>
   );
 };
-
-
 export default PatientForm;

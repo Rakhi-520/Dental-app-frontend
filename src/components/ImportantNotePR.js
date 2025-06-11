@@ -4,7 +4,6 @@ import { IconButton } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-
 const ImportantNotePR = ({ userRole = 'user', showNotification = false }) => {
   const LOCAL_KEY = 'important_note_pr_draft';
 
@@ -140,19 +139,21 @@ const ImportantNotePR = ({ userRole = 'user', showNotification = false }) => {
       </div>
 
       {/* 🧾 Text Area */}
+      <div style={{ padding: '0 16px' }}>
       <textarea
-        rows={6}
+        rows={8}
         style={{
-          width: '110%',
-          padding: '5px',
+          color: 'red',
+          width: '105%',
+          height: '150px',
+          padding: '12px',
+          paddingRight: '50px', 
           fontSize: '1rem',
           border: '2px solid #333',
           borderRadius: '10px',
-          backgroundColor: '#f7f7f7',
-          color: '#333',
+          backgroundColor: 'white',
           resize: 'none',
           overflowY: 'auto',
-          height: '80px',
           fontFamily: 'inherit',
           boxSizing: 'border-box',
           marginBottom: '10px'
@@ -161,6 +162,7 @@ const ImportantNotePR = ({ userRole = 'user', showNotification = false }) => {
         value={note}
         onChange={handleTyping}
       ></textarea>
+      </div>
 
       {/* 💬 Status Message */}
       {message && (
